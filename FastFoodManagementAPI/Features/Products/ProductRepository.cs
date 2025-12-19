@@ -47,5 +47,13 @@ namespace FastFoodManagementAPI.Features.Products
             await _context.SaveChangesAsync();
             return product;
         }
+
+        // Get products by ids
+        public async Task<List<Product>> GetProductsByIdsAsync(List<int> ids)
+        {
+            return await _context.Products
+                .Where(p => ids.Contains(p.Id))
+                .ToListAsync();
+        }
     }
 }

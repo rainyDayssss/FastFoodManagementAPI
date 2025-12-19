@@ -1,6 +1,48 @@
-@FastFoodManagementAPI_HostAddress = http://localhost:5038
+@FastFoodManagementAPI_HostAddress = https://localhost:7243
 
-GET {{FastFoodManagementAPI_HostAddress}}/weatherforecast/
-Accept: application/json
+
+// Get all products
+GET {{FastFoodManagementAPI_HostAddress}}/api/products
+
+###
+
+
+
+// Create order
+POST {{FastFoodManagementAPI_HostAddress}}/api/orders
+Content-Type: application/json
+
+{
+    "TableId": 2,
+    "Items": [
+      {
+        "productId": 3,
+        "quantity": 10
+      }
+    ]
+}
+
+###
+
+
+// Get all orders
+GET {{FastFoodManagementAPI_HostAddress}}/api/orders
+
+###
+
+// Update order status
+PATCH {{FastFoodManagementAPI_HostAddress}}/api/orders/1
+Content-Type: application/json
+
+{
+  "OrderStatus": "Completed"
+}
+
+###
+
+
+
+
+GET {{FastFoodManagementAPI_HostAddress}}/api/orders/status/Completed
 
 ###

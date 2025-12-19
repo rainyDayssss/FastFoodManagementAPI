@@ -1,6 +1,9 @@
+using FastFoodManagementAPI.Features.Orders;
 using FastFoodManagementAPI.Features.Products;
 using FastFoodManagementAPI.Shared;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,10 +20,18 @@ builder.Services.AddDbContext<FastFoodDbContext>(options =>
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<ProductService>();
 
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<OrderService>();
+
 // ----------------------
 // Add Controllers (API)
 // ----------------------
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter());
+    });
 
 // ----------------------
 // Enable CORS for React Dev

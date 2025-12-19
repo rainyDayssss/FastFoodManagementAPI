@@ -8,8 +8,9 @@ namespace FastFoodManagementAPI.Features.Orders
         public int Id { get; set; }
         public int? TableId { get; set; } // optional for takeout
         public List<OrderItem> OrderItems { get; set; } = new();
-        public OrderStatus OrderStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Confirmed; // default
         [JsonIgnore]
-        public Payment? Payment { get; set; } // nullable, because order may not have a sale yet
+        public Payment? Payment { get; set; } // nullable, because order may not have paid yet
+        public decimal Total => OrderItems.Sum(i => i.LineTotal); // total for order
     }
 }
