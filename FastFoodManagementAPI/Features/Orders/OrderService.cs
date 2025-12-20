@@ -54,6 +54,7 @@ namespace FastFoodManagementAPI.Features.Orders
 
                     return new OrderItem
                     {
+                        ProductName = product.Name,
                         ProductId = dto.ProductId,
                         Quantity = dto.Quantity,
                         UnitPrice = product.Price // fetch price from DB

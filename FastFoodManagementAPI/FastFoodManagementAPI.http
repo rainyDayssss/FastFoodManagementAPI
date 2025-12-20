@@ -13,7 +13,7 @@ POST {{FastFoodManagementAPI_HostAddress}}/api/orders
 Content-Type: application/json
 
 {
-    "TableId": 132,
+    "TableId": 99,
     "Items": [
       {
         "productId": 3,
