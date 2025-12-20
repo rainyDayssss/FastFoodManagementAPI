@@ -1,6 +1,5 @@
 ﻿using FastFoodManagementAPI.Features.Orders;
 using FastFoodManagementAPI.Features.Products;
-using FastFoodManagementAPI.Features.Sales;
 using Microsoft.EntityFrameworkCore;
 
 namespace FastFoodManagementAPI.Shared
@@ -10,7 +9,6 @@ namespace FastFoodManagementAPI.Shared
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<OrderItem> OrderItems { get; set; } = null!;
-        public DbSet<Payment> Payments { get; set; } = null!;
 
         public FastFoodDbContext(DbContextOptions<FastFoodDbContext> options) : base(options)
         {
@@ -36,13 +34,6 @@ namespace FastFoodManagementAPI.Shared
                 .HasForeignKey(oi => oi.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Order -> Sale (1:1)
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.Payment)
-                .WithOne(s => s.Order)
-                .HasForeignKey<Payment>(s => s.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
-
             // Optional: decimal precision
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
@@ -52,9 +43,10 @@ namespace FastFoodManagementAPI.Shared
                 .Property(oi => oi.UnitPrice)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Payment>()
-               .Property(s => s.TotalAmount)
-               .HasColumnType("decimal(18,2)"); // precision 18, scale 2
+            // Add unique index on Name for active products (optional: make unique only for active products)
+            modelBuilder.Entity<Product>()
+                .HasIndex(p => p.Name)
+                .HasDatabaseName("IX_Product_Name");
         }
     }
 }

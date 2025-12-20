@@ -1,4 +1,5 @@
-﻿using FastFoodManagementAPI.Shared;
+﻿using FastFoodManagementAPI.Features.Orders;
+using FastFoodManagementAPI.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace FastFoodManagementAPI.Features.Products
@@ -43,7 +44,11 @@ namespace FastFoodManagementAPI.Features.Products
         // Delete
         public async Task<Product?> DeleteProductAsync(Product product)
         {
-            _context.Products.Remove(product);
+            if (product == null) return null;
+
+            product.IsActive = false;  // mark as inactive
+            product.Stock = 0;         // optionally set stock to 0
+
             await _context.SaveChangesAsync();
             return product;
         }
@@ -54,6 +59,40 @@ namespace FastFoodManagementAPI.Features.Products
             return await _context.Products
                 .Where(p => ids.Contains(p.Id))
                 .ToListAsync();
+        }
+
+        // Deduct product quantity
+        public async Task DeductStockByProductsAsync(List<OrderItem> orderItems) 
+        {
+            var productIds = orderItems.Select(i => i.ProductId).ToList();
+
+            var products = await _context.Products
+                .Where(p => productIds.Contains(p.Id))
+                .ToListAsync();
+
+            var productDict = products.ToDictionary(p => p.Id);
+
+            foreach (var item in orderItems)
+            {
+                var product = productDict[item.ProductId];
+                product.Stock -= item.Quantity;
+
+                if (product.Stock <= 0)
+                {
+                    product.Stock = 0;
+                    product.IsActive = false;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        // Get product by name
+        public async Task<Product?> GetProductByNameAsync(string name)
+        {
+            // Include inactive products so we can reactivate them if needed
+            return await _context.Products
+                .FirstOrDefaultAsync(p => p.Name.ToLower() == name.ToLower());
         }
     }
 }

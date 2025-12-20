@@ -13,11 +13,11 @@ POST {{FastFoodManagementAPI_HostAddress}}/api/orders
 Content-Type: application/json
 
 {
-    "TableId": 2,
+    "TableId": 132,
     "Items": [
       {
         "productId": 3,
-        "quantity": 10
+        "quantity": 1
       }
     ]
 }
@@ -31,11 +31,11 @@ GET {{FastFoodManagementAPI_HostAddress}}/api/orders
 ###
 
 // Update order status
-PATCH {{FastFoodManagementAPI_HostAddress}}/api/orders/1
+PATCH {{FastFoodManagementAPI_HostAddress}}/api/orders/3
 Content-Type: application/json
 
 {
-  "OrderStatus": "Completed"
+  "OrderStatus": "Paid"
 }
 
 ###
@@ -43,6 +43,6 @@ Content-Type: application/json
 
 
 
-GET {{FastFoodManagementAPI_HostAddress}}/api/orders/status/Completed
+GET {{FastFoodManagementAPI_HostAddress}}/api/orders/status/Paid
 
 ###

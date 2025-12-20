@@ -17,28 +17,56 @@
             if (image == null || image.Length == 0)
                 throw new ArgumentException("Product image is required");
 
-            // Save image
-            var folderPath = Path.Combine(_environment.WebRootPath, "images/products");
-            Directory.CreateDirectory(folderPath);
+            // Check if an inactive product with the same name exists
+            var existingProduct = await _productRepository
+                .GetProductByNameAsync(dto.Name);
 
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-            var filePath = Path.Combine(folderPath, fileName);
+            if (existingProduct != null)
+            {
+                // Reactivate product
+                existingProduct.Stock += dto.Stock; // add new stock
+                existingProduct.Price = dto.Price;   // update price if needed
+                existingProduct.IsActive = true;
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
+                // Update image if a new one is provided
+                var folderPath = Path.Combine(_environment.WebRootPath, "images/products");
+                Directory.CreateDirectory(folderPath);
+
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+                var filePath = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+
+                existingProduct.ImagePath = $"images/products/{fileName}";
+
+                return await _productRepository.UpdateProductAsync(existingProduct);
+            }
+
+            // Save new image
+            var folder = Path.Combine(_environment.WebRootPath, "images/products");
+            Directory.CreateDirectory(folder);
+
+            var newFileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+            var newFilePath = Path.Combine(folder, newFileName);
+
+            using (var stream = new FileStream(newFilePath, FileMode.Create))
             {
                 await image.CopyToAsync(stream);
             }
 
-            // Create entity
+            // Create new product entity
             var product = new Product
             {
                 Name = dto.Name,
                 Price = dto.Price,
                 Stock = dto.Stock,
-                ImagePath = $"images/products/{fileName}" // set file path in entity only
+                IsActive = true,
+                ImagePath = $"images/products/{newFileName}"
             };
 
-            // Save to database
             return await _productRepository.AddProductAsync(product);
         }
 

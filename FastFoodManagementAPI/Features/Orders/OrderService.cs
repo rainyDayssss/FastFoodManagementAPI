@@ -32,6 +32,16 @@ namespace FastFoodManagementAPI.Features.Orders
             }
 
 
+            // also check if the order quantity of a product is lesser than the stocks to allow
+            foreach (var dto in createOrderDTO.Items)
+            {
+                var product = products.First(p => p.Id == dto.ProductId);
+                if (dto.Quantity > product.Stock)
+                {
+                    throw new Exception($"Not enough stock for product '{product.Name}'. Available: {product.Stock}, Requested: {dto.Quantity}");
+                }
+            }
+
             // dto to entity (map OrderItems with real prices)
             var order = new Order
             {
@@ -48,10 +58,14 @@ namespace FastFoodManagementAPI.Features.Orders
                         Quantity = dto.Quantity,
                         UnitPrice = product.Price // fetch price from DB
                     };
-                }).ToList(),
-                Payment = null // to be paid later
+                }).ToList()
             };
-            
+
+
+            // deduct stock
+            var orderItems = order.OrderItems;
+            await _productRepository.DeductStockByProductsAsync(orderItems);
+
             // save order
             return await _orderRepository.AddOrderAsync(order);
         }

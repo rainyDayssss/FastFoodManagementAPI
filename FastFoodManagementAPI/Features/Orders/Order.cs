@@ -1,5 +1,4 @@
-﻿using FastFoodManagementAPI.Features.Sales;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace FastFoodManagementAPI.Features.Orders
 {
@@ -10,7 +9,6 @@ namespace FastFoodManagementAPI.Features.Orders
         public List<OrderItem> OrderItems { get; set; } = new();
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Confirmed; // default
         [JsonIgnore]
-        public Payment? Payment { get; set; } // nullable, because order may not have paid yet
         public decimal Total => OrderItems.Sum(i => i.LineTotal); // total for order
     }
 }

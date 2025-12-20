@@ -9,6 +9,7 @@ namespace FastFoodManagementAPI.Features.Products
         public string Name { get; set; } = null!;
         public decimal Price { get; set; }
         public int Stock { get; set; }
+        public bool IsActive { get; set; } = true;
         public string ImagePath { get; set; } = null!;
         [JsonIgnore]
         public List<OrderItem> OrderItems { get; set; } = new();

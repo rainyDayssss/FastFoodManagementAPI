@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FastFoodManagementAPI.Migrations
 {
     [DbContext(typeof(FastFoodDbContext))]
-    [Migration("20251217173818_Initialize database and tables")]
-    partial class Initializedatabaseandtables
+    [Migration("20251219091513_Initialize db")]
+    partial class Initializedb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,28 +99,6 @@ namespace FastFoodManagementAPI.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("FastFoodManagementAPI.Features.Sales.Payment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
-
-                    b.ToTable("Payments");
-                });
-
             modelBuilder.Entity("FastFoodManagementAPI.Features.Orders.OrderItem", b =>
                 {
                     b.HasOne("FastFoodManagementAPI.Features.Orders.Order", "Order")
@@ -140,22 +118,9 @@ namespace FastFoodManagementAPI.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("FastFoodManagementAPI.Features.Sales.Payment", b =>
-                {
-                    b.HasOne("FastFoodManagementAPI.Features.Orders.Order", "Order")
-                        .WithOne("Payment")
-                        .HasForeignKey("FastFoodManagementAPI.Features.Sales.Payment", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("FastFoodManagementAPI.Features.Orders.Order", b =>
                 {
                     b.Navigation("OrderItems");
-
-                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("FastFoodManagementAPI.Features.Products.Product", b =>
