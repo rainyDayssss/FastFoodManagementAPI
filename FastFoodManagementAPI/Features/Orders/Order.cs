@@ -8,7 +8,6 @@ namespace FastFoodManagementAPI.Features.Orders
         public int? TableId { get; set; } // optional for takeout
         public List<OrderItem> OrderItems { get; set; } = new();
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Confirmed; // default
-        [JsonIgnore]
         public decimal Total => OrderItems.Sum(i => i.LineTotal); // total for order
     }
 }

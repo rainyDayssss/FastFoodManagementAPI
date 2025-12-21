@@ -42,7 +42,7 @@ Content-Type: application/json
 
 
 
-
-GET {{FastFoodManagementAPI_HostAddress}}/api/orders/status/Paid
+// Get all orders by status
+GET {{FastFoodManagementAPI_HostAddress}}/api/orders/status/Completed
 
 ###
