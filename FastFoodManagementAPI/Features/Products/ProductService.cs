@@ -105,10 +105,30 @@ public class ProductService
                 File.Delete(oldPath);
         }
 
-        // Update fields
+        // Update name
         if (!string.IsNullOrEmpty(patchProductDTO.Name)) product.Name = patchProductDTO.Name;
-        if (patchProductDTO.Price.HasValue) product.Price = patchProductDTO.Price.Value;
-        if (patchProductDTO.Stock.HasValue) product.Stock = patchProductDTO.Stock.Value;
+
+        // check if price and stock are provided and valid
+        if (patchProductDTO.Price.HasValue)
+        {
+            if (patchProductDTO.Price.Value <= 0)
+                throw new ArgumentException("Price must be greater than 0");
+
+            product.Price = patchProductDTO.Price.Value;
+        }
+
+        if (patchProductDTO.Stock.HasValue)
+        {
+            if (patchProductDTO.Stock.Value < 0)
+                throw new ArgumentException("Stock cannot be negative");
+
+            product.Stock = patchProductDTO.Stock.Value;
+
+            // Update active state based on stock
+            product.IsActive = product.Stock > 0;
+        }
+        
+        
 
         // Handle optional new image
         if (image != null && image.Length > 0)
