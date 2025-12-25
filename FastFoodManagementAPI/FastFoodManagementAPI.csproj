@@ -22,4 +22,12 @@
     <Folder Include="wwwroot\images\products\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\C# Projects\FastFoodManagementAPI\FastFoodManagementAPI\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\C# Projects\FastFoodManagementAPI\FastFoodManagementAPI\.editorconfig" />
+  </ItemGroup>
+
 </Project>

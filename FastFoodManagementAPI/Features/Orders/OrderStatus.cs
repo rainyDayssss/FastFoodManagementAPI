@@ -1,9 +1,8 @@
-﻿namespace FastFoodManagementAPI.Features.Orders
+﻿namespace FastFoodManagementAPI.Features.Orders;
+
+public enum OrderStatus
 {
-    public enum OrderStatus
-    {
-        Confirmed, // sent to kitchen
-        Completed, // sent to cashier
-        Paid
-    }
+    Confirmed, // sent to kitchen
+    Completed, // sent to cashier
+    Paid
 }

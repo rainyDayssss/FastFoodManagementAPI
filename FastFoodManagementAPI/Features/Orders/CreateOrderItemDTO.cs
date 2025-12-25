@@ -1,12 +1,11 @@
-﻿namespace FastFoodManagementAPI.Features.Orders
+﻿namespace FastFoodManagementAPI.Features.Orders;
+
+public class CreateOrderItemDTO
 {
-    public class CreateOrderItemDTO
-    {
-        // Product being ordered
-        public int ProductId { get; set; }
+    // Product being ordered
+    public int ProductId { get; set; }
 
-        // Quantity of this product
-        public int Quantity { get; set; }
+    // Quantity of this product
+    public int Quantity { get; set; }
 
-    }
 }
